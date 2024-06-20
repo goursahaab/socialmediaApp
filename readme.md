@@ -6,4 +6,14 @@ Step 2: Create .gitignore and generate content online and paste;
  Step 7: Write server code in app.js;
  Step 8: create models folder and databse.js for db connection ;
  Step 9: confugring online database;
- Step 10: configuring routes
+ Step 10: configuring routes;
+  step 11. Create index.routes.js and user.route.js and require in app.js ;
+ Step 12. Create Partials in views and use tailwind cdn ;
+ Step 13. create pages according to nav links in index.routes.js ;
+ Step 14. create login register and forget ejs page. ;
+ Step 15. Create profile.ejs page as well ;
+ Step 16: install npm i --save passport passport-local passport-local-mongoose express-session ;
+ Step 17: Configure Passport Boilerplate -
+         i. changes in user.schema.js -
+         ii. changes in app.js -
+         iii. changes in user.routes.js ;
