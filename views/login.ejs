@@ -1,7 +1,19 @@
 <%- include('partials/header') %>
 <%- include('partials/nav') %>
 
-<h1>login page</h1>
+<div class="w-[80%] mx-auto p-10">
+    <form class="text-2xl m-auto w-1/2 " action="/user/login" method="post">
+        <h1 class="mb-10 text-5xl font-bold">login user</h1>
+        <input class="w-full mb-5 border p-3 rounded" type="text" placeholder="user name" name="username">
+        <input class="w-full mb-5 border p-3 rounded" type="password" placeholder="*********" name="password">
+        <p class="text-right mb-3"><a class="text-blue-400" href="/forgot">forgot password</a></p>
+        
+        <button class="mb-5 hover:bg-red-400 w-1/2 bg-red-300 px-5 py-2 text-white rounded" type="submit">login user</button>
+        <p>Don't have an account ? <a class="text-blue-400" href="/register">register new user</a></p>
+
+
+    </form>
+</div>
 
 
 

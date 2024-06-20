@@ -13,10 +13,14 @@ var logger = require('morgan');
 
 require("./models/database").connectDB();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./routes/index.route');
+var usersRouter = require('./routes/users.route');
 
 var app = express();
+
+const session=require('express-session')
+const passport=require('passport')
+const userCollection=require('./models/user.schema')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,6 +31,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+// password authentication boilerplate --->
+
+app.use(
+  session({
+    secret:process.env.SECRET,
+    resave:false,
+    saveUninitialized:true,
+
+  })
+)
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(userCollection.serializeUser());
+passport.deserializeUser(userCollection.deserializeUser());
+
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
