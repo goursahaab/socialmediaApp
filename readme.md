@@ -17,3 +17,8 @@ Step 2: Create .gitignore and generate content online and paste;
          i. changes in user.schema.js -
          ii. changes in app.js -
          iii. changes in user.routes.js ;
+
+ step 18: Register User in the database;
+ Step 19: Make Login router with middleware ;
+ Step 20: Middleware isLoggedIn in middleware/auth.js for page authentication ;
+ Step 21: Logout Functionality ;

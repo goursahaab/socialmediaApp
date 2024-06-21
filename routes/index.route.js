@@ -1,38 +1,30 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'home | SocialMedia' });
+router.get("/", (req, res) => {
+    res.render("index", { title: "Homepage | SocialMedia", user: req.user });
 });
 
-/* GET about page. */
-router.get('/about', function(req, res, next) {
-  res.render('about', { title: 'about | SocialMedia' });
+router.get("/about", (req, res) => {
+    res.render("about", { title: "About | SocialMedia", user: req.user });
 });
 
-/* GET contact page. */
-router.get('/contact', function(req, res, next) {
-  res.render('contact', { title: 'contact | SocialMedia' });
+router.get("/contact", (req, res) => {
+    res.render("contact", { title: "Contact | SocialMedia", user: req.user });
 });
 
-/* GET home page. */
-router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'log in | SocialMedia' });
+router.get("/login", (req, res) => {
+    res.render("login", { title: "Login | SocialMedia", user: req.user });
 });
 
-/* GET home page. */
-router.get('/register', function(req, res, next) {
-  res.render('register', { title: 'register | SocialMedia' });
+router.get("/register", (req, res) => {
+    res.render("register", { title: "Register | SocialMedia", user: req.user });
 });
 
-/* GET home page. */
-router.get('/forgot', function(req, res, next) {
-  res.render('forgot', { title: 'forgot| SocialMedia ' });
-});
-
-
-router.get('/profile', function(req, res, next) {
-  res.render('profile', { title: 'profile| SocialMedia ' });
+router.get("/forgot", (req, res) => {
+    res.render("forgot", {
+        title: "Forgot Password  | SocialMedia",
+        user: req.user,
+    });
 });
 module.exports = router;
