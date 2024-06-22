@@ -4,7 +4,7 @@ var router = express.Router();
 const passport = require("passport");
 const LocalStategy = require("passport-local");
 const UserCollection = require("../models/user.schema");
-const { isLoggedIn } = require("../middleware/auth");
+const {isLoggedIn }= require("../middleware/auth");
 
 passport.use(new LocalStategy(UserCollection.authenticate()));
 
