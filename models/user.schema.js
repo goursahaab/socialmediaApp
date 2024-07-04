@@ -9,8 +9,13 @@ const userSchema= new mongoose.Schema(
         password: String,
         email: String,
         avatar: {
-            type: String,
-            default: "https://www.gravatar.com/avatar/",
+            fileId: String,
+            url: String,
+            thumbnailUrl: String,
+        },
+        otp: {
+            type: Number,
+            default: 0,
         },
     },
     { timestamps: true }

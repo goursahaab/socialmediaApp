@@ -8,6 +8,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
+// express-fileupload require
+const fileUpload=require('express-fileupload')
+
+
 // connect data base 
 
 
@@ -17,6 +21,13 @@ var indexRouter = require('./routes/index.route');
 var usersRouter = require('./routes/users.route');
 
 var app = express();
+
+
+app.use(
+  fileUpload({
+      limits: { fileSize: 50 * 1024 * 1024 },
+  })
+);
 
 const session=require('express-session')
 const passport=require('passport')

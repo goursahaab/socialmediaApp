@@ -1,23 +1,29 @@
-<nav class="flex justify-between py-10 w-[80%] mx-auto">
-    <div class="text-2xl font-extrabold ">Logo</div>
+<nav class="flex justify-between py-10 w-[80%] mx-auto h-32">
+    <div class="w-[5%] rounded">
+        <img class="w-[100%] "   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDmMAA1FmqWrmuZ_QG4LUDyQjctTBuxpvJlz9liXJMlu0JH0aBM94OycmoWKm-ou0KmeE&usqp=CAU" alt="LOGO">
+    </div>
     <div class="flex gap-x-10">
         <% if(user) { %>
-            <a href="/user/profile">Home</a>
+            <a class="font-bold"  href="/user/profile">Home</a>
             <% }else { %>
-                <a href="/">Home</a>
+                <a class="font-bold" href="/">Home</a>
 
                 <% } %>
-                    <a href="/about">About</a>
-                    <a href="/contact">Contact</a>
+                    <a class="font-bold"  href="/about">About</a>
+                    <a class="font-bold"  href="/contact">Contact</a>
     </div>
 
-    <div>
+    <div class="w-[10%] flex ">
 
         <% if(user) { %>
-            <a class="bg-red-300 px-5 py-2 rounded" href="/user/logout">Logout</a>
+            <a class="font-bold text-3xl  px-5 py-2 rounded" href="/user/logout">Logout</a>
 
+           
+                <img class="w-[100%] h-full "   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDmMAA1FmqWrmuZ_QG4LUDyQjctTBuxpvJlz9liXJMlu0JH0aBM94OycmoWKm-ou0KmeE&usqp=CAU" alt="LOGO">
+                <a href="/user/settings"><i class="ri-chat-settings-fill"></i></a>
+        
             <% }else { %>
-                <a class="bg-green-300 px-5 py-2 rounded" href="/login">Login</a>
+                <a class="bg-zinc-500 hover:bg-zinc-700 px-5 py-2 text-2xl rounded" href="/login">Login</a>
 
 
                 <% } %>
