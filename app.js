@@ -6,6 +6,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const ImageKit = require('imagekit');
+
+
 
 
 // express-fileupload require
@@ -19,6 +22,7 @@ require("./models/database").connectDB();
 
 var indexRouter = require('./routes/index.route');
 var usersRouter = require('./routes/users.route');
+var postRoutes = require("./routes/post.route");
 
 var app = express();
 
@@ -65,6 +69,7 @@ passport.deserializeUser(userCollection.deserializeUser());
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use("/post", postRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -5,7 +5,7 @@ const passport = require("passport");
 const LocalStategy = require("passport-local");
 const UserCollection = require("../models/user.schema");
 const {isLoggedIn }= require("../middleware/auth");
-const sendMail = require("../utils/sendMail");
+const {sendMail} = require("../utils/sendMail");
 const imagekit = require("../utils/imagekit");
 passport.use(new LocalStategy(UserCollection.authenticate()));
 
@@ -43,8 +43,9 @@ router.post("/send-mail", async (req, res, next) => {
             return res.send(
                 "No user found with this email. <a href='/forget-email'>Try Again</a>"
             );
-
+        console.log(user.email)
         await sendMail(req, res, user);
+        
     } catch (error) {
         console.log(error);
         res.send(error.message);
@@ -94,7 +95,7 @@ router.post("/avatar/:id", isLoggedIn, async (req, res, next) => {
         res.redirect("/user/settings");
     } catch (error) {
         console.log(error);
-        res.send(error);
+        res.send(error.message);
     }
 });
 

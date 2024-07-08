@@ -1,8 +1,20 @@
 const express = require("express");
 const router = express.Router();
+const PostCollection = require("../models/post.schema");
 
-router.get("/", (req, res) => {
-    res.render("index", { title: "Homepage | SocialMedia", user: req.user });
+router.get("/", async (req, res) => {
+    try {
+        const posts = await PostCollection.find();
+
+        res.render("index", {
+            title: "Homepage | SocialMedia",
+            user: req.user,
+            posts: posts,
+        });
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
 });
 
 router.get("/about", (req, res) => {

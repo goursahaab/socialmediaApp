@@ -20,6 +20,7 @@ exports.sendMail = async (req, res, user) => {
                 <h1>Password Reset OTP</h1>
                 <h3>OTP: ${OTP}</h3>
             `,
+            
     };
 
     transport.sendMail(mailOptions, async (err, info) => {
@@ -28,7 +29,7 @@ exports.sendMail = async (req, res, user) => {
 
         user.otp = OTP;
         await user.save();
-
+        console.log(OTP)
         return res.redirect(`/verify-otp/${user._id}`);
     });
 };
