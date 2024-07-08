@@ -8,7 +8,7 @@
         <div class="flex w-full p-10">
           <div>
             <img class="avatarimage rounded-full w-[10vmax] h-[10vmax] object-cover" src="<%= user.avatar.url %>"
-              alt="No image Found">
+              alt="No pic Found">
 
             <form method="post" class="avatarform hidden" action="/user/avatar/<%= user._id%>"
               enctype="multipart/form-data">
@@ -54,6 +54,15 @@
 
 
     </div>
+
+    <div class="w-[80%] mx-auto px-[5%] pb-10">
+      <hr>
+
+      <h1 class="mt-5 text-2xl">User Timeline</h1>
+
+      <div>
+        <%= JSON.stringify(user.posts)%>
+      </div>
 
     <!--  -->
     <script>

@@ -5,6 +5,7 @@ const passport = require("passport");
 const LocalStategy = require("passport-local");
 const UserCollection = require("../models/user.schema");
 const {isLoggedIn }= require("../middleware/auth");
+const PostCollection = require("../models/post.schema");
 const {sendMail} = require("../utils/sendMail");
 const imagekit = require("../utils/imagekit");
 passport.use(new LocalStategy(UserCollection.authenticate()));
@@ -25,8 +26,19 @@ router.post("/register", async (req, res, next) => {
 router.post("/login", passport.authenticate("local", {successRedirect: "/user/profile", failureRedirect: "/login",  }),(req, res, next) => {}
 );
 
-router.get("/profile", isLoggedIn, (req, res, next) => {
-    res.render("profile", { title: "Profile | Socialmedia", user: req.user });
+router.get("/profile", isLoggedIn, async (req, res, next) => {
+    try {
+        const posts = await PostCollection.find().populate("user");
+        console.log(posts);
+        res.render("profile", {
+            title: "Profile | Socialmedia",
+            user: req.user,
+            posts: posts,
+        });
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
 });
 
 router.get("/logout", isLoggedIn, (req, res, next) => {
@@ -75,8 +87,17 @@ router.post("/verify-otp/:id", async (req, res, next) => {
     }
 });
 
-router.get("/settings", isLoggedIn, (req, res, next) => {
-    res.render("settings", { title: "Settings | Socialmedia", user: req.user });
+router.get("/settings", isLoggedIn, async (req, res, next) => {
+    try {
+        const userAndPosts = await req.user.populate("posts");
+        res.render("settings", {
+            title: "Settings | Socialmedia",
+            user: userAndPosts,
+        });
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
 });
 
 router.post("/avatar/:id", isLoggedIn, async (req, res, next) => {
@@ -103,6 +124,11 @@ router.get("/delete/:id", isLoggedIn, async (req, res, next) => {
     try {
         const user = await UserCollection.findByIdAndDelete(req.params.id);
         await imagekit.deleteFile(user.avatar.fileId);
+        
+        await user.posts.forEach(async (post) => {
+            const deletedPost = await PostCollection.findByIdAndDelete(post);
+            await imagekit.deleteFile(deletedPost.media.fileId);
+        });
         res.redirect("/login");
     } catch (error) {
         console.log(error);

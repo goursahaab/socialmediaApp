@@ -1,11 +1,41 @@
-<%- include('partials/header') %>
-<%- include('partials/nav') %>
+<%- include('partials/header')%>
+  <!--  -->
+  <%- include('partials/nav')%>
+    <!--  -->
+
+     
+      
+     
+       
+    <div class="w-[80%] mx-auto p-10">
+
+        <div class="w-full bg-zinc-700 rounded">
+          <h1 class=" mb-10 text-white text-5xl font-bold">hello <%= user.username%> 👋</h1>
+          <img src="<%= user.avatar%>" alt="">
+          <a class="bg-red-300 px-5 py-2 text-white rounded" href="/user/logout">Logout</a>
+        </div>
+        <hr>
+        <div class="w-full mt-10">
+            <h1 class="text-3xl font-extrabold mb-10">Posts</h1>
+
+            <% posts.forEach((post,index)=> { %>
+              <!--  -->
+              <div class="">
+                <h1 class="text-2xl font-bold">
+                  <%= post.title%>
+                </h1>
+                <img class="h-[100px]" src="<%= post.media.thumbnailUrl%>" alt="">
+                <span>
+                  <%= post.likes.length%>
+                </span><a href="/post/like/<%= post._id%>">
+                  Like
+                </a>
+              </div>
+              <!--  -->
+              <%}) %>
+        </div>
+    </div>
 
 
-<div class="w-[80%] mx-auto p-10 bg-zinc-700 rounded">
-    <h1 class="mb-10 text-white text-5xl font-bold">this is login profile page</h1>
-    <a class="bg-red-300 px-5 py-2 text-white rounded" href="/user/logout">Log out</a>
-</div>
-
-
-<%- include('partials/footer') %>
+    <!--  -->
+    <%- include('partials/footer')%>

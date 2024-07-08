@@ -4,7 +4,8 @@ const PostCollection = require("../models/post.schema");
 
 router.get("/", async (req, res) => {
     try {
-        const posts = await PostCollection.find();
+        // Get all posts from the database, populate the user field with user details, and sort by createdAt in descending order.
+        const posts = await PostCollection.find().populate("user");
 
         res.render("index", {
             title: "Homepage | SocialMedia",
