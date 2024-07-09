@@ -20,16 +20,17 @@
 
             <% posts.forEach((post,index)=> { %>
               <!--  -->
-              <div class="">
+              <div class="w-[50%]">
                 <h1 class="text-2xl font-bold">
                   <%= post.title%>
                 </h1>
-                <img class="h-[100px]" src="<%= post.media.thumbnailUrl%>" alt="">
+                <img class="h-[300px]" src="<%= post.media.thumbnailUrl%>" alt="">
                 <span>
                   <%= post.likes.length%>
                 </span><a href="/post/like/<%= post._id%>">
                   Like
                 </a>
+                <a href="/post/delete/<%= post._id%>">delete</a>
               </div>
               <!--  -->
               <%}) %>

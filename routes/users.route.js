@@ -136,4 +136,17 @@ router.get("/delete/:id", isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.get('/chat', isLoggedIn, async (req, res, next) => {
+
+    const users = await UserCollection.find({
+        _id: { $ne: req.user._id }
+    });
+
+    res.render('chat', {
+        title: "Chat | Socialmedia",
+        user: req.user,
+        users
+    })
+})
+
 module.exports = router;

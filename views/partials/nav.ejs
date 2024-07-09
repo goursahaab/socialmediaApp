@@ -12,6 +12,11 @@
                 <% } %>
                     <a class="font-bold"  href="/about">About</a>
                     <a class="font-bold"  href="/contact">Contact</a>
+                    
+    <% if(user){ %>
+
+        <a href="/user/chat">Chat</a>
+        <% } %>
     </div>
 
     <div class="w-[20%] flex justify-between">
@@ -24,9 +29,9 @@
                 <a class="w-[15%]  mx-5px"  href="/user/settings"><i class="ri-chat-settings-fill text-3xl"></i></a>
         
             <% }else { %>
-                <a class="bg-red-300 hover:bg-red-500 px-5 py-2 text-2xl text-white rounded-full" href="/login">Login</a>
+                <a class="text-3xl  px-5 py-2  text-black font-bold" href="/login">Log in</a>
                 
-                <img class="w-[110%] h-full rounded-full  "   src="https://img.freepik.com/premium-photo/black-white-image-man-s-head-round-background_745528-17173.jpg"alt="LOGO">
+                <img class="w-[15%] object-cover h-[90%] rounded-full"   src="https://img.freepik.com/premium-photo/black-white-image-man-s-head-round-background_745528-17173.jpg"alt="LOGO">
 
 
                 <% } %>
