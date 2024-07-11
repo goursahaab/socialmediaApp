@@ -1,4 +1,4 @@
-const io = require("socket.io")();
+const io = require("socket.io");
 const userModel = require('./models/user.schema')
 const socketapi = {
     io: io

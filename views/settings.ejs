@@ -1,42 +1,38 @@
 <%- include('partials/header')%>
-  <!--  -->
-  <%- include('partials/nav')%>
-    <!--  -->
-    <div class="flex w-[80%] mx-auto p-10 ">
+<!--  -->
+<%- include('partials/nav')%>
+<!--  -->
+<div class="flex w-[80%] mx-auto p-10 ">
 
-      <div class="w-[70%] px-10">
-        <div class="flex w-full p-10">
-          <div>
-            <img class="avatarimage rounded-full w-[10vmax] h-[10vmax] object-cover" src="<%= user.avatar.url %>"
-              alt="No pic Found">
+  <div class="w-[70%] px-10">
+    <div class="flex w-full p-10">
+      <div>
+        <img class="avatarimage rounded-full w-[10vmax] h-[10vmax] object-cover" src="<%= user.avatar.url%>" alt="No image Found">
 
-            <form method="post" class="avatarform hidden" action="/user/avatar/<%= user._id%>"
-              enctype="multipart/form-data">
-              <input class="avatarinput" type="file" name="avatar">
-            </form>
+        <form method="post" class="avatarform hidden" action="/user/avatar/<%= user._id%>" enctype="multipart/form-data">
+          <input class="avatarinput" type="file" name="avatar">
+        </form>
 
-          </div>
+      </div>
 
-          <div class="ml-10">
-            <h1 class="text-5xl font-extrabold">
-              <%= user.username%>
-            </h1>
-            <p class="mt-3">
-              <%= user.email%>
-            </p>
-          </div>
+      <div class="ml-10">
+        <h1 class="text-5xl font-extrabold">
+          <%= user.username%>
+        </h1>
+        <p class="mt-3">
+          <%= user.email%>
+        </p>
+      </div>
 
-        </div>
+    </div>
 
 
-        <form class="text-2xl m-auto " action="/user/register" method="post">
-          <h1 class=" mb-10  text-5xl font-bold">User Profile Details</h1>
-          <input class="w-full mb-5 border p-3 rounded" type="email" placeholder="example@email.com" name="email"
-            value="<%= user.email%>">
-          <input class="w-full mb-5 border p-3 rounded" type="text" placeholder="username" name="username"
-            value="<%= user.username%>">
+    <form class="text-2xl m-auto " action="/user/update/<%= user._id%>" method="post">
+      <h1 class=" mb-10  text-5xl font-bold">User Profile Details</h1>
+      <input class="w-full mb-5 border p-3 rounded" type="email" placeholder="example@email.com" name="email" value="<%= user.email%>">
+      <input class="w-full mb-5 border p-3 rounded" type="text" placeholder="username" name="username" value="<%= user.username%>">
 
-          <button class="mb-5 hover:bg-red-400 w-1/2 bg-red-300 px-5 py-2 text-white rounded" >Update User Profile</button>
+      <button class="mb-5 hover:bg-red-400 w-1/2 bg-red-300 px-5 py-2 text-white rounded" ">Update User Profile</button>
         
         </form>
 
@@ -44,40 +40,107 @@
 
 
       <div class=" w-[30%]">
-            <h1 class="text-2xl font-bold">Setting Options</h1>
-            <ul class="pt-5 flex flex-col gap-y-3 text-xl ">
-              <li><a href="/user/reset-password/<%= user._id%>">Reset Password</a></li>
-              <li><a href="/user/logout">Logout User</a></li>
-              <li><a href="/user/delete/<%= user._id%>">Delete User</a></li>
-            </ul>
-      </div>
+        <h1 class="text-2xl font-bold">Setting Options</h1>
+        <ul class="pt-5 flex flex-col gap-y-3 text-xl ">
+          <button id="rzp-button1">Pay with Razorpay</button>
+          <li><a href="/user/reset-password/<%= user._id%>">Reset Password</a></li>
+          <li><a href="/user/logout">Logout User</a></li>
+          <li><a href="/user/delete/<%= user._id%>">Delete User</a></li>
+        </ul>
+  </div>
 
 
-    </div>
+</div>
+<div class="w-[80%] mx-auto px-[5%] pb-10">
+  <hr>
 
-    <div class="w-[80%] mx-auto px-[5%] pb-10">
-      <hr>
+  <h1 class="mt-5 text-2xl">User Timeline</h1>
 
-      <h1 class="mt-5 text-2xl">User Timeline</h1>
+  <div>
+    <%= JSON.stringify(user.posts)%>
+  </div>
 
-      <div>
-        <%= JSON.stringify(user.posts)%>
-      </div>
+</div>
 
-    <!--  -->
-    <script>
-      const avatarimage = document.querySelector('.avatarimage');
-      const avatarinput = document.querySelector('.avatarinput');
-      const avatarform = document.querySelector('.avatarform');
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-      avatarimage.addEventListener('click', () => {
-        avatarinput.click();
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var orderId;
+  $(document).ready(function() {
+    var settings = {
+      "url": "/user/create-order",
+      "method": "POST",
+      "timeout": 0,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "data": JSON.stringify({
+        "username": "<%= user.username %>"
+      }),
+    };
+
+    //creates new orderId everytime
+    $.ajax(settings).done(function(response) {
+
+      var options = {
+        "key": "rzp_test_LwqRND5lR9qJee", // Enter the Key ID generated from the Dashboard
+        "amount": response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": response.currency,
+        "name": "Acme Corp",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function(response) {
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature)
+        },
+        "prefill": {
+          "name": "Gaurav Kumar",
+          "email": "gaurav.kumar@example.com",
+          "contact": "9000090000"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#3399cc"
+        }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.on('payment.failed', function(response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
       });
+      document.getElementById('rzp-button1').onclick = function(e) {
+        rzp1.open();
+        e.preventDefault();
+      }
 
-      avatarinput.addEventListener('change', () => {
-        avatarform.submit();
-      });
+    });
+  });
+</script>
 
-    </script>
 
-    <%- include('partials/footer')%>
+<!--  -->
+<script>
+  const avatarimage = document.querySelector('.avatarimage');
+  const avatarinput = document.querySelector('.avatarinput');
+  const avatarform = document.querySelector('.avatarform');
+
+  avatarimage.addEventListener('click', () => {
+    avatarinput.click();
+  });
+
+  avatarinput.addEventListener('change', () => {
+    avatarform.submit();
+  });
+</script>
+
+<%- include('partials/footer')%>

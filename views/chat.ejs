@@ -36,7 +36,7 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<!-- <script src="/socket.io/socket.io.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script> -->
 <script>
   var socket = io();
   const loggedInUsername = "<%= user.username %>"
@@ -50,7 +50,25 @@
     receiver = username
     document.querySelector('.right .top .user img').src = userImage
     document.querySelector('.right .top .user h1').innerText = username
+
+    socket.emit('openChat', {
+      receiver,
+      sender: loggedInUsername
+    })
+
   }
+
+  socket.on("openChat", messages => {
+    messages.forEach(messageObject => {
+
+      if (messageObject.sender === loggedInUsername) {
+        appendOutgoingMessage(messageObject.text)
+      } else {
+        appendIncomingMessage(messageObject.text)
+      }
+
+    })
+  })
 
   function appendOutgoingMessage(message) {
     const template = `
@@ -58,13 +76,6 @@
           <p>${message}</p>
         </div>`
     document.querySelector('.converationArea').innerHTML += template
-
-    socket.emit('sony', {
-      message,
-      receiver,
-      sender: loggedInUsername
-    })
-
   }
 
   function appendIncomingMessage(message) {
@@ -85,6 +96,12 @@
     const message = document.querySelector('.inputField input').value
 
     appendOutgoingMessage(message)
+
+    socket.emit('sony', {
+      message,
+      receiver,
+      sender: loggedInUsername
+    })
 
   })
 </script>

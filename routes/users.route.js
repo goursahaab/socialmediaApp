@@ -1,13 +1,22 @@
 var express = require("express");
 var router = express.Router();
 
+const Razorpay = require("razorpay");
+
+var instance = new Razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET,
+});
+
+
 const passport = require("passport");
 const LocalStategy = require("passport-local");
 const UserCollection = require("../models/user.schema");
-const {isLoggedIn }= require("../middleware/auth");
-const PostCollection = require("../models/post.schema");
-const {sendMail} = require("../utils/sendMail");
+const { isLoggedIn } = require("../middleware/auth");
+const { sendMail } = require("../utils/sendmail");
 const imagekit = require("../utils/imagekit");
+const PostCollection = require("../models/post.schema");
+
 passport.use(new LocalStategy(UserCollection.authenticate()));
 
 router.post("/register", async (req, res, next) => {
@@ -23,7 +32,13 @@ router.post("/register", async (req, res, next) => {
     }
 });
 
-router.post("/login", passport.authenticate("local", {successRedirect: "/user/profile", failureRedirect: "/login",  }),(req, res, next) => {}
+router.post(
+    "/login",
+    passport.authenticate("local", {
+        successRedirect: "/user/profile",
+        failureRedirect: "/login",
+    }),
+    (req, res, next) => { }
 );
 
 router.get("/profile", isLoggedIn, async (req, res, next) => {
@@ -47,7 +62,6 @@ router.get("/logout", isLoggedIn, (req, res, next) => {
     });
 });
 
-
 router.post("/send-mail", async (req, res, next) => {
     try {
         const user = await UserCollection.findOne({ email: req.body.email });
@@ -55,9 +69,8 @@ router.post("/send-mail", async (req, res, next) => {
             return res.send(
                 "No user found with this email. <a href='/forget-email'>Try Again</a>"
             );
-        console.log(user.email)
+
         await sendMail(req, res, user);
-        
     } catch (error) {
         console.log(error);
         res.send(error.message);
@@ -124,11 +137,12 @@ router.get("/delete/:id", isLoggedIn, async (req, res, next) => {
     try {
         const user = await UserCollection.findByIdAndDelete(req.params.id);
         await imagekit.deleteFile(user.avatar.fileId);
-        
+
         await user.posts.forEach(async (post) => {
             const deletedPost = await PostCollection.findByIdAndDelete(post);
             await imagekit.deleteFile(deletedPost.media.fileId);
         });
+
         res.redirect("/login");
     } catch (error) {
         console.log(error);
@@ -136,6 +150,36 @@ router.get("/delete/:id", isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.post("/update/:id", isLoggedIn, async (req, res, next) => {
+    try {
+        await UserCollection.findByIdAndUpdate(req.params.id, req.body);
+        res.redirect("/user/settings");
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
+});
+
+router.get("/reset-password/:id", isLoggedIn, (req, res, next) => {
+    res.render("reset", {
+        title: "Reset Password | Socialmedia",
+        user: req.user,
+    });
+});
+
+router.post("/reset-password/:id", isLoggedIn, async (req, res, next) => {
+    try {
+        await req.user.changePassword(
+            req.body.oldpassword,
+            req.body.newpassword
+        );
+        await req.user.save();
+        res.redirect("/user/settings");
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
+});
 router.get('/chat', isLoggedIn, async (req, res, next) => {
 
     const users = await UserCollection.find({
@@ -147,6 +191,22 @@ router.get('/chat', isLoggedIn, async (req, res, next) => {
         user: req.user,
         users
     })
+})
+
+router.post('/create-order', isLoggedIn, async (req, res, next) => {
+
+    console.log(req.body)
+
+    var options = {
+        amount: 5000 * 100,  // amount in the smallest currency unit
+        currency: "INR",
+    };
+    instance.orders.create(options, function (err, order) {
+        console.log(order);
+        res.json(order);
+    });
+
+
 })
 
 module.exports = router;
