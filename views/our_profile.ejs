@@ -1,0 +1,31 @@
+<%- include('partials/header')%>
+<!--  -->
+<%- include('partials/nav')%>
+
+
+<div class="w-full mt-10 px-20">
+    <h1 class="text-3xl font-extrabold mb-10">Posts</h1>
+
+    <% posts.forEach((post,index)=> { %>
+       <% if(post.user.username===user.username){ %>
+      <!--  -->
+      <div class="w-[50%]">
+        <h1 class="text-2xl font-bold">
+          <%= post.title%>
+        </h1>
+        <img class="h-[300px]" src="<%= post.media.thumbnailUrl%>" alt="">
+        <span>
+          <%= post.likes.length%>
+        </span><a href="/post/like/<%= post._id%>">
+          Like
+        </a>
+        <a href="/post/delete/<%= post._id%>">delete</a>
+      </div>
+   <% } %>
+      <!--  -->
+      <%}) %>
+</div>
+
+
+
+<%- include('partials/footer')%>

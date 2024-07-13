@@ -32,7 +32,7 @@
       <input class="w-full mb-5 border p-3 rounded" type="email" placeholder="example@email.com" name="email" value="<%= user.email%>">
       <input class="w-full mb-5 border p-3 rounded" type="text" placeholder="username" name="username" value="<%= user.username%>">
 
-      <button class="mb-5 hover:bg-red-400 w-1/2 bg-red-300 px-5 py-2 text-white rounded" ">Update User Profile</button>
+      <button class="mb-5 hover:bg-red-400 w-1/2 bg-red-300 px-5 py-2 text-white rounded" >Update User Profile</button>
         
         </form>
 
@@ -43,6 +43,7 @@
         <h1 class="text-2xl font-bold">Setting Options</h1>
         <ul class="pt-5 flex flex-col gap-y-3 text-xl ">
           <button id="rzp-button1">Pay with Razorpay</button>
+          <li><a href="/user/our_profile">our porfile</a>
           <li><a href="/user/reset-password/<%= user._id%>">Reset Password</a></li>
           <li><a href="/user/logout">Logout User</a></li>
           <li><a href="/user/delete/<%= user._id%>">Delete User</a></li>

@@ -1,10 +1,9 @@
 const express = require("express");
-const router = express.Router();
 const PostCollection = require("../models/post.schema");
+const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        // Get all posts from the database, populate the user field with user details, and sort by createdAt in descending order.
         const posts = await PostCollection.find().populate("user");
 
         res.render("index", {
@@ -32,13 +31,6 @@ router.get("/login", (req, res) => {
 
 router.get("/register", (req, res) => {
     res.render("register", { title: "Register | SocialMedia", user: req.user });
-});
-
-router.get("/forgot", (req, res) => {
-    res.render("forgot", {
-        title: "Forgot Password  | SocialMedia",
-        user: req.user,
-    });
 });
 
 router.get("/forget-email", (req, res) => {

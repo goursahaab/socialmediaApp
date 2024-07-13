@@ -5,6 +5,7 @@ const {
     CreatePostPage,
     CreatePost,
     PostLike,
+    postdelete,
 } = require("../controllers/post.controller");
 
 /**
@@ -14,8 +15,11 @@ const {
  */
 router.route("/create").get(isLoggedIn, CreatePostPage);
 
+
 router.post("/create", isLoggedIn, CreatePost);
 
 router.get("/like/:pid", isLoggedIn, PostLike);
+
+// router.get("/delete_post/:pid", isLoggedIn, postdelete);
 
 module.exports = router;

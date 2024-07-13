@@ -3,10 +3,10 @@ var router = express.Router();
 
 const Razorpay = require("razorpay");
 
-var instance = new Razorpay({
+const instance = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET,
-});
+})
 
 
 const passport = require("passport");
@@ -193,20 +193,81 @@ router.get('/chat', isLoggedIn, async (req, res, next) => {
     })
 })
 
+
+router.get('/our_profile', isLoggedIn, async (req, res, next) => {
+
+
+    try {
+        const posts = await PostCollection.find().populate("user");
+        
+        res.render("our_profile", {
+            title: "Profile | Socialmedia",
+            user: req.user,
+            posts: posts,
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
+})
+
 router.post('/create-order', isLoggedIn, async (req, res, next) => {
 
-    console.log(req.body)
+    console.log(req.body);
 
-    var options = {
-        amount: 5000 * 100,  // amount in the smallest currency unit
-        currency: "INR",
-    };
-    instance.orders.create(options, function (err, order) {
+
+    try {
+        var options = {
+            amount: 5000 * 100,  // amount in the smallest currency unit
+            currency: "INR",
+        };
+        const order = await instance.orders.create(options,);
+
         console.log(order);
-        res.json(order);
-    });
 
-
+        res.send(order)
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
 })
+
+
+router.post('/payment/verify', isLoggedIn, async (req, res, next) => {
+    const razorpaySignature = req.body.signature;
+    const orderId = req.body.order_id;
+    const paymentId = req.body.payment_id;
+    const secret = process.env.KEY_SECRET;
+
+    try {
+
+        var { validatePaymentVerification } = require('../node_modules/razorpay/dist/utils/razorpay-utils')
+
+        const result = validatePaymentVerification({
+            "order_id": orderId,
+            "payment_id": paymentId,
+        }, razorpaySignature, secret);
+
+        if (result) {
+
+
+            await UserCollection.findByIdAndUpdate(req.user._id, { isPremium: true });
+
+            console.log("Payment Successfull");
+
+            res.send("Payment Successfull")
+        }
+        else {
+            console.log("Payment Failed");
+            res.send("Payment Failed")
+        }
+    } catch (error) {
+        console.log(error);
+        res.send(error.message);
+    }
+})
+
 
 module.exports = router;

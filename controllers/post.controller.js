@@ -49,3 +49,25 @@ exports.PostLike = async function (req, res, next) {
         res.send(error.message);
     }
 };
+
+exports.Postdelete = async function (req, res, next) {
+    try {
+        const post = await PostCollection.findById(req.params.pid);
+
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        if (post.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        await post.remove();
+        
+
+        res.json({ message: "Post deleted successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.message);
+    }
+};

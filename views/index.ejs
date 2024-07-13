@@ -9,8 +9,27 @@
       <a class="bg-red-300 px-5 py-2 text-white rounded" href="/login">Start Your Journey</a>
     </div>
 
-    <div class="w-full">
-      <%= JSON.stringify(posts)%>
+    
+
+    <div class="w-full flex-center" style="display: flex;justify-content: center; flex-direction: column; padding-top: 60px; border: 2px solid blue;" >
+      <% posts.forEach((post,index)=> { %>
+        <!--  -->
+        <div class="w-[50%]">
+          <h1>  <%= post.user.username%></h1>
+          <p class="text-2xl font-bold">
+            <%= post.title%>
+          </p>
+          <img class="h-[400px] " src="<%= post.media.thumbnailUrl%>" alt="">
+          <span>
+            <%= post.likes.length%>
+          </span><a href="/post/like/<%= post._id%>">
+            Like
+          </a>
+          <a href="/post/delete/<%= post._id%>">delete</a>
+        </div>
+        <!--  -->
+        <%}) %>
+       
     </div>
 
   </div>
